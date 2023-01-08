@@ -1,0 +1,52 @@
+﻿@model List<Post>
+
+@{
+    ViewData["Title"] = "Anasayfa";
+}
+@foreach (Post gonderi in Model)
+{
+    <article class="col-12 col-md-6 tm-post">
+        <hr class="tm-hr-primary">
+        <a href=asp-action =" Post" asp-controller="Home" asp-route-id="@gonderi.ID" class="effect-lily tm-post-link tm-pt-60">
+            <div class="tm-post-link-inner">
+                <img src="@gonderi.ImagePath" alt="Image" class="img-fluid">
+            </div>
+            <span class="position-absolute tm-new-badge">New</span>
+            <h2 class="tm-pt-30 tm-color-primary tm-post-title"><a asp-action="Post" asp-controller="Home" asp-route-id="@gonderi.ID">@gonderi.Title</a></h2>
+        </a>
+        <p class="tm-pt-30">
+            @*gönderinin ilk 100 karakterini gösterir.*@
+            @if (gonderi.PostDetail.Length > 100)
+            {
+                @gonderi.PostDetail.Substring(0,100) <span>...</span>
+
+            }
+            else
+            {
+                @gonderi.PostDetail <span>...</span>
+
+            }
+
+        </p>
+        <div class="d-flex justify-content-between tm-pt-45">
+            <span class="tm-color-primary">@gonderi.Tags</span>
+            <span class="tm-color-primary">@gonderi.CreatedDate.Value.ToShortDateString
+            ()</span>
+        </div>
+        <hr>
+        <div class="d-flex justify-content-between">
+            @*<span>@gonderi.Comments.Count</span>
+            <span>@gonderi.UserID</span>*@
+        </div>
+    </article>
+}
+
+
+
+
+
+@*
+1. Yorum sayısı, yazar adı soyadı bilgilerini ana sayfada ilgili yazıların kartında gösteriniz. Include() kullanarak.
+    2. Kategoriler sayfasını oluşturunuz. Tıpkı ana sayfa gibi kategori listesini gösteriniz.
+    3. Kategori adına tıklandığında o kategoriye ait postları ana sayfadaki liste şeklinde gösteriniz.
+*@

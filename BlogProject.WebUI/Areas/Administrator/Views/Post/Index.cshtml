@@ -1,0 +1,84 @@
+﻿@using BlogProject.Core.Entity.Enum
+@model List<Post>
+@{
+    ViewData["Title"] = "Makale Listesi";
+}
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-title">Bordered Table</div>
+    </div>
+    <div class="card-body">
+        <div class="card-sub">
+           <a asp-action="Create" asp-controller="Post" asp-area="Administrator" class="btn btn-success text-white"> Yeni Makale Ekle</a>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">Makale Başlığı</th>
+                    <th scope="col">Etiketler</th>
+                    <th scope="col">Durumu</th>
+                    <th scope="col">İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Post item in Model)
+                {
+                    <tr>
+                        <td>@item.Title</td>
+                        <td>@item.Tags</td>
+                        <td>
+                            @if (item.Status == Status.Active)
+                            {
+                                <span class="bg-success text-white">Aktif</span>
+                            }
+                            else if (item.Status == Status.None)
+                            {
+                                <span>Onay Bekliyor</span>
+                            }
+                            else if (item.Status == Status.Update)
+                            {
+                                <span class="bg-warning text-white">Güncellendi</span>
+                            }
+                            else if (item.Status == Status.Deleted)
+                            {
+                                <span class="bg-danger text-white">Silindi</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.Status == Status.None || item.Status == Status.Deleted)
+                            {
+                                <a asp-action="Activate" asp-controller="Post" asp-area="Administrator" asp-route-id="@item.ID" class="btn btn-success text-white">
+                                    <i class="la la-check"></i>
+                                </a>
+                                <a asp-action="Update" asp-controller="Post" asp-area="Administrator" asp-route-id="@item.ID" class="btn btn-warning text-white">
+                                    <i class="la la-edit"></i>
+                                </a>
+                                <a asp-action="Remove" asp-controller="Post" asp-area="Administrator" asp-route-id="@item.ID" class="btn btn-danger text-white">
+                                    <i class="la la-trash"></i>
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td>1</td>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>mdo</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Jacob</td>
+                    <td>Thornton</td>
+                    <td>fat</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td colspan="2">Larry the Bird</td>
+                    <td>twitter</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
