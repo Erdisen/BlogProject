@@ -1,7 +1,9 @@
 ﻿using BlogProject.Core.Service;
 using BlogProject.Entities.Entities;
+using BlogProject.WebUI.Areas.Administrator.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace BlogProject.WebUI.Areas.Administrator.Controllers
 {
@@ -10,11 +12,13 @@ namespace BlogProject.WebUI.Areas.Administrator.Controllers
     {
         private readonly ICoreService<Post> _postService;
         private readonly ICoreService<Category> _categoryService;
+        private readonly IHostingEnvironment _environment;
 
-        public PostController(ICoreService<Post> postService, ICoreService<Category> categoryService)
+        public PostController(ICoreService<Post> postService, ICoreService<Category> categoryService, IHostingEnvironment environment)
         {
             _postService = postService;
             this._categoryService = categoryService;
+            this._environment = environment;
         }
         public IActionResult Index()
         {
@@ -27,8 +31,24 @@ namespace BlogProject.WebUI.Areas.Administrator.Controllers
             return View();
         }
         [HttpPost] //Create sayfasından gelen veriyi Db ye ekleyecek
-        public IActionResult Create(Post post)
+        public IActionResult Create(Post post,List<IFormFile> files)
         {
+            ViewBag.Categories = new SelectList(_categoryService.GetActive(), "ID", "CategoryName");
+            post.UserID = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "ID").Value);
+
+            //Alınan resimler, yüklemek için oluşturduğumuz metoda göndermeliyiz.
+            bool imgResult;
+            string imgPath = Upload.ImageUpload(files, _environment, out imgResult);
+            if (imgResult)
+            {
+                post.ImagePath = imgPath; // eğer imgResult true ise ilgili property'e resmin yolunu ekle.
+            }
+            else
+            {
+                ViewBag.MessageError = $"Resim yükleme işleminde bir hata oluştu!";
+                return View();
+            }
+
             post.Status = Core.Entity.Enum.Status.None;
             #region ModelState Kontrol
             if (ModelState.IsValid)
