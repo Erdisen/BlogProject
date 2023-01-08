@@ -23,7 +23,8 @@ namespace BlogProject.WebUI.Areas.Administrator.Models
                         {
                             file.CopyTo(fileStream);
                             result = true;
-                            return filePath.Substring(filePath.IndexOf("\\Uploads\\"));
+                            string newFilePath=filePath.Substring(filePath.IndexOf("Uploads\\"));
+                            return newFilePath.Replace("\\", "/");
                         }
                     }
                     else

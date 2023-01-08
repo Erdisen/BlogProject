@@ -17,17 +17,17 @@ namespace BlogProject.Entities.Entities
         public string Title { get; set; }
         public string PostDetail { get; set; }
         public string Tags { get; set; }
-        public string ImagePath { get; set; }
+        public string? ImagePath { get; set; }
         public int ViewCount { get; set; }
 
         //Navigation Properties
         [ForeignKey("Kategori")]
         public Guid CategoryID { get; set; }
-        public virtual Category Kategori { get; set; }
+        public virtual Category? Kategori { get; set; }
 
         [ForeignKey("Kullanici")]
         public Guid UserID { get; set; }
-        public virtual User Kullanici { get; set; }
+        public virtual User? Kullanici { get; set; }
 
 
         public virtual List<Comment> Comments { get; set; }
